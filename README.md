@@ -20,10 +20,15 @@
 
 ---
 ## 할 일
-1. Product, User, Wishlist 엔티티 설계 및 매핑
-2. JPA를 이용한 CRUD 기능 구현
-3. Wishlist에 대한 연관 관계 매핑 설정
-4. 기존 JdbcTemplate 기반 코드를 JPA로 리팩터링
-5. RESTful API 구현
-6. 데이터베이스 스키마 자동 생성 설정
-7. 예외 처리 및 검증 기능 추가
+1. Wishlist에 대한 연관 관계 매핑 설정
+2. 기존 JdbcTemplate 기반 코드를 JPA로 리팩터링
+3. 데이터베이스 스키마 자동 생성 설정
+
+### 3주차 step3
+
+---
+## 할 일
+1. Pageable 객체를 사용하여 상품 및 위시리스트 페이지네이션 구현
+2. `ProductAdminController`와 `ProductController`를 수정하여 페이지네이션 기능 추가
+3. `ProductService`를 수정하여 페이지네이션 기능 지원
+4. 상품 목록과 위시리스트 HTML 페이지를 수정하여 페이지네이션 UI 추가
