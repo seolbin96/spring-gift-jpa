@@ -5,11 +5,10 @@ import gift.model.Product;
 import gift.model.User;
 import gift.security.LoginMember;
 import gift.service.WishlistService;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
 
 @RestController
 @RequestMapping("/api/wishlist")
@@ -29,9 +28,10 @@ public class WishlistController {
     }
 
     @GetMapping
-    public ResponseEntity<List<Product>> getWishlist(@LoginMember User user) {
-        List<WishlistDTO> wishlist = wishlistService.loadWishlist(user.getEmail());
-        List<Product> products = wishlistService.getProductsFromWishlist(wishlist);
+    public ResponseEntity<Page<Product>> getWishlist(@LoginMember User user,
+                                                     @RequestParam(defaultValue = "0") int page,
+                                                     @RequestParam(defaultValue = "5") int size) {
+        Page<Product> products = wishlistService.getProductsFromWishlist(user.getEmail(), page, size);
         return new ResponseEntity<>(products, HttpStatus.OK);
     }
 
