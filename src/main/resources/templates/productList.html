@@ -18,12 +18,12 @@
             <th><input type="checkbox"></th>
             <th>Name</th>
             <th>Price</th>
-            <th>Image</th> <!-- 수정: Image URL을 Image로 변경 -->
+            <th>Image</th>
             <th>Actions</th>
         </tr>
         </thead>
         <tbody>
-        <tr th:each="product : ${products}">
+        <tr th:each="product : ${productsPage.content}">
             <td><input type="checkbox"></td>
             <td th:text="${product.name}"></td>
             <td th:text="${product.price}"></td>
@@ -36,13 +36,13 @@
         </tbody>
     </table>
     <div class="pagination">
-        <span>Showing 5 out of 25 entries</span>
+        <span>Showing <span th:text="${productsPage.size}">5</span> out of <span th:text="${productsPage.totalElements}">25</span> entries</span>
         <div>
-            <a href="#">Previous</a>
-            <a href="#">1</a>
-            <a href="#">2</a>
-            <a href="#">3</a>
-            <a href="#">Next</a>
+            <a th:if="${!productsPage.first}" th:href="@{/admin/products(page=${productsPage.number - 1}, size=${productsPage.size})}">Previous</a>
+            <span th:each="pageNum : ${#numbers.sequence(0, productsPage.totalPages - 1)}">
+                <a th:href="@{/admin/products(page=${pageNum}, size=${productsPage.size})}" th:text="${pageNum + 1}" th:classappend="${pageNum == productsPage.number} ? 'active' : ''"></a>
+            </span>
+            <a th:if="${!productsPage.last}" th:href="@{/admin/products(page=${productsPage.number + 1}, size=${productsPage.size})}">Next</a>
         </div>
     </div>
 </div>
