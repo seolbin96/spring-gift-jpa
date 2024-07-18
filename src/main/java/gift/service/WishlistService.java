@@ -7,11 +7,11 @@ import gift.model.Wishlist;
 import gift.repository.WishlistRepository;
 import gift.repository.UserRepository;
 import gift.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class WishlistService {
@@ -36,11 +36,10 @@ public class WishlistService {
     }
 
     @Transactional(readOnly = true)
-    public List<WishlistDTO> loadWishlist(String userId){
-        return wishlistRepository.findByUserEmail(userId)
-                .stream()
-                .map(wishlist -> new WishlistDTO(wishlist.getUser().getEmail(), wishlist.getProduct().getId()))
-                .collect(Collectors.toList());
+    public Page<WishlistDTO> loadWishlist(String userId, int page, int size){
+        Pageable pageable = PageRequest.of(page, size);
+        return wishlistRepository.findByUserEmail(userId, pageable)
+                .map(wishlist -> new WishlistDTO(wishlist.getUser().getEmail(), wishlist.getProduct().getId()));
     }
 
     @Transactional
@@ -49,10 +48,9 @@ public class WishlistService {
     }
 
     @Transactional(readOnly = true)
-    public List<Product> getProductsFromWishlist(List<WishlistDTO> wishlist) {
-        return wishlist.stream()
-                .map(item -> productRepository.findById(item.getProductId())
-                        .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + item.getProductId())))
-                .collect(Collectors.toList());
+    public Page<Product> getProductsFromWishlist(String userId, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        return wishlistRepository.findByUserEmail(userId, pageable)
+                .map(Wishlist::getProduct);
     }
 }

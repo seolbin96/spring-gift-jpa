@@ -2,10 +2,9 @@ package gift.service;
 
 import gift.model.Product;
 import gift.repository.ProductRepository;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
-
-import java.util.List;
-import java.util.Optional;
 
 @Service
 public class ProductService {
@@ -16,16 +15,13 @@ public class ProductService {
         this.productRepository = productRepository;
     }
 
-    public List<Product> getAllProducts() {
-        return productRepository.findAll();
+    public Page<Product> getAllProducts(Pageable pageable) {
+        return productRepository.findAll(pageable);
     }
 
     public Product getProductById(Long id) {
-        Optional<Product> product = productRepository.findById(id);
-        if (product.isEmpty()) {
-            throw new IllegalArgumentException("Invalid product Id:" + id);
-        }
-        return product.get();
+        return productRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Invalid product Id:" + id));
     }
 
     public Product saveProduct(Product product) {
